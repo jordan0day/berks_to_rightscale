@@ -8,6 +8,14 @@ This is primarily a commandline tool for injesting a Berksfile and uploading the
 
 == Usage
 
+Example usage:
+
+  bundle exec berks_to_rightscale release PROJECT-NAME RELEASE-VERSION-NAME --container=BUCKET-NAME --provider=aws
+
+So for the button-masher application, and an S3 bucket named 'rightscale-cookbooks', that line would look like
+
+  bundle exec berks_to_rightscale release button-masher v1.0.0 --container=rightscale-cookbooks --provider=aws
+
 This requires a ~/.fog configuration file with the proper credentials for any storage provider(s) you wish to use.  To get an example of the ~/.fog config file do the following after installing berks_to_rightscale (shown above)
 
   fog
