@@ -82,8 +82,12 @@ module BerksToRightscale
         exit 1
       end
 
-      berksfile = ::Berkshelf::Berksfile.from_file(final_opts[:berksfile])
-      berksfile.install(final_opts)
+      # In newer versions of berkshelf, instead of installing cookbooks at pwd, they're installed to
+      # ~/.berkshelf by default. But we want to keep them in pwd for this tool.
+      ENV['BERKSHELF_PATH'] = Dir.pwd
+
+      berksfile = ::Berkshelf::Berksfile.from_file(final_opts[:berksfile], final_opts)
+      berksfile.install
 
       meta = ::Chef::Knife::CookbookMetadata.new
       meta.config[:all] = true
