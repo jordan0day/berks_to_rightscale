@@ -9,8 +9,8 @@ Gem::Specification.new do |gem|
   gem.authors = ["Ryan J. Geyer"]
   gem.executables << 'berks_to_rightscale'
 
-  gem.add_dependency('berkshelf', '~> 2.0.6')
-  gem.add_dependency('chef', '~> 11.4.2')
+  gem.add_dependency('berkshelf', '~> 3.1.1')
+  gem.add_dependency('chef', '~> 11.12.2')
   gem.add_dependency('thor', '~> 0.18.1')
   gem.add_dependency('fog', '~> 1.12.1')
 
