@@ -82,20 +82,8 @@ module BerksToRightscale
         exit 1
       end
 
-      # In newer versions of berkshelf, instead of installing cookbooks at pwd, they're installed to
-      # ~/.berkshelf by default. But we want to keep them in pwd for this tool.
-      ENV['BERKSHELF_PATH'] = Dir.pwd
-
       berksfile = ::Berkshelf::Berksfile.from_file(final_opts[:berksfile], final_opts)
-      berksfile.install
-
-      meta = ::Chef::Knife::CookbookMetadata.new
-      meta.config[:all] = true
-      meta.config[:cookbook_path] = output_path
-      meta.run
-
-      puts "Creating a tarball containing the specified cookbooks"
-      `tar -C #{output_path} -zcvf #{tarball_path} . 2>&1`
+      package_path = berksfile.package tarball_path
 
       file = File.open(tarball_path, 'r')
       fog_file = container.files.create(:key => file_key, :body => file, :acl => 'public-read')
@@ -106,9 +94,9 @@ module BerksToRightscale
 
       # Cleanup
       unless final_opts[:no_cleanup]
-        FileUtils.rm tarball if File.exist? tarball
-        FileUtils.rm_rf output_path if File.directory? output_path
+        FileUtils.rm package_path if File.exist? package_path
       end
+
     end
 
     desc "list_destinations", "Lists all possible release locations.  Basically a list of supported fog storage providers"
